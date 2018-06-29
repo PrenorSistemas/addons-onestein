@@ -12,7 +12,9 @@ odoo.define("web_disable_export_group", function(require) {
             var self = this;
             var _super = this._super;
             if (session.is_superuser) {
-                _super.apply(this, arguments);
+                try{
+                _super.apply(this, arguments);}
+                catch (err){}
             } else {
                 var model_res_users = new Model("res.users");
                 model_res_users.call("has_group", ["web_disable_export_group.group_export_data"]).done(function(can_export) {
