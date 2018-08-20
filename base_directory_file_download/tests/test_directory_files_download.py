@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
-# Copyright 2017 Onestein (<http://www.onestein.eu>)
-# License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
+# Copyright 2017-2018 Onestein (<http://www.onestein.eu>)
+# License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
 import os
 from tempfile import gettempdir
 
 from odoo.tests import common
-from odoo.exceptions import Warning
+from odoo.exceptions import UserError
 
 
 class TestBaseDirectoryFilesDownload(common.TransactionCase):
@@ -41,10 +41,10 @@ class TestBaseDirectoryFilesDownload(common.TransactionCase):
 
         # test onchange directory (to not existing)
         test_dir.directory = '/txxx'
-        with self.assertRaises(Warning):
+        with self.assertRaises(UserError):
             test_dir.onchange_directory()
         self.assertEqual(len(test_dir.file_ids), 0)
-        with self.assertRaises(Warning):
+        with self.assertRaises(UserError):
             test_dir.reload()
         self.assertEqual(len(test_dir.file_ids), 0)
 

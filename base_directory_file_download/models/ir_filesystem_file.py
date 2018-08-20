@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
-# Copyright 2017 Onestein (<http://www.onestein.eu>)
-# License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
+# Copyright 2017-2018 Onestein (<http://www.onestein.eu>)
+# License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
 import logging
 import os
 
 from odoo import api, fields, models, _
-from odoo.exceptions import Warning
+from odoo.exceptions import UserError
 from odoo.tools import human_size
 
 _logger = logging.getLogger(__name__)
@@ -28,14 +28,14 @@ class IrFilesystemDirectoryLine(models.TransientModel):
     def _file_read(self, fname, bin_size=False):
 
         def file_not_found(fname):
-            raise Warning(_(
+            raise UserError(_(
                 '''Error while reading file %s.
                 Maybe it was removed or permission is changed.
                 Please refresh the list.''' % fname))
 
         self.ensure_one()
         r = ''
-        directory = self.directory_id.get_dir() or ''
+        directory = self.directory_id.get_dir()
         full_path = directory + fname
         if not (directory and os.path.isfile(full_path)):
             file_not_found(fname)

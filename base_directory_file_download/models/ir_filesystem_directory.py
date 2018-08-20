@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
-# Copyright 2017 Onestein (<http://www.onestein.eu>)
-# License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
+# Copyright 2017-2018 Onestein (<http://www.onestein.eu>)
+# License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
 import logging
 
 from os import listdir
 from os.path import isfile, join, exists, normpath, realpath
 from odoo import api, fields, models, _
-from odoo.exceptions import Warning
+from odoo.exceptions import UserError
 
 _logger = logging.getLogger(__name__)
 
@@ -23,7 +23,10 @@ class IrFilesystemDirectory(models.Model):
         compute='_compute_file_ids',
         string='Files'
     )
-    file_count = fields.Integer(compute='_file_count', string="# Files")
+    file_count = fields.Integer(
+        compute='_compute_file_count',
+        string="# Files"
+    )
 
     @api.multi
     def get_dir(self):
@@ -49,10 +52,10 @@ class IrFilesystemDirectory(models.Model):
     @api.onchange('directory')
     def onchange_directory(self):
         if self.directory and not exists(self.directory):
-            raise Warning(_('Directory does not exist'))
+            raise UserError(_('Directory does not exist'))
 
     @api.multi
-    def _file_count(self):
+    def _compute_file_count(self):
         for directory in self:
             directory.file_count = len(directory.file_ids)
 
