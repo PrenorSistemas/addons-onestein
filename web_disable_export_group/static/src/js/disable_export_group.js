@@ -1,5 +1,5 @@
-odoo.define("web_disable_export_group", function (require) {
-    "use strict";
+odoo.define("web_disable_export_group", function(require) {
+"use strict";
 
     var core = require("web.core");
     var Sidebar = require("web.Sidebar");
@@ -8,19 +8,14 @@ odoo.define("web_disable_export_group", function (require) {
     var session = require("web.session");
 
     Sidebar.include({
-        add_items: function (section_code, items) {
+        add_items: function(section_code, items) {
             var self = this;
             var _super = this._super;
             if (session.is_superuser) {
-                try {
-                    _super.apply(this, arguments);
-                }
-                catch (err) {
-                }
-
+                _super.apply(this, arguments);
             } else {
                 var model_res_users = new Model("res.users");
-                model_res_users.call("has_group", ["web_disable_export_group.group_export_data"]).done(function (can_export) {
+                model_res_users.call("has_group", ["web_disable_export_group.group_export_data"]).done(function(can_export) {
                     if (!can_export) {
                         var export_label = _t("Export");
                         var new_items = items;

@@ -11,8 +11,8 @@
     'category': 'Web',
     'depends': ['web'],
     'data': [
-      #  'security/groups.xml',
-      #  'templates/assets.xml',
+        'security/groups.xml',
+        'templates/assets.xml',
     ],
     'installable': True,
 }
